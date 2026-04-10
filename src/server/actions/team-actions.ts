@@ -128,7 +128,7 @@ export async function inviteMember(teamId: string, email: string) {
   const existingInvite = await db.teamInvitation.findUnique({
     where: { teamId_email: { teamId, email: userEmail } },
   })
-  if (existingInvite && existingInvite.status === 'PENDING') {
+  if (existingInvite?.status === 'PENDING') {
     throw new Error('Invitation already sent and pending')
   }
 

@@ -38,6 +38,7 @@ interface AdminTabsProps {
       remaining: number
       percentUsed: number
       cachedAt: string
+      status: 'ok' | 'error' | 'permission_denied'
     }
   }
   currentUserId: string

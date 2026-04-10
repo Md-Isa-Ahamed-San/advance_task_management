@@ -14,6 +14,7 @@ interface SystemHealthTabProps {
     remaining: number
     percentUsed: number
     cachedAt: string
+    status: 'ok' | 'error' | 'permission_denied'
   }
 }
 
@@ -212,8 +213,10 @@ export function SystemHealthTab({
           <div className="flex items-center gap-2">
             <span className="text-base">📡</span>
             <h3 className="text-sm font-semibold" style={{ color: 'var(--foreground)' }}>Ably Message Quota</h3>
-            {ablyStats.messagesThisMonth >= 0 ? (
+            {ablyStats.status === 'ok' ? (
               <StatusBadge ok label="Connected" />
+            ) : ablyStats.status === 'permission_denied' ? (
+              <StatusBadge ok={false} label="Restricted" />
             ) : (
               <StatusBadge ok={false} label="API Error" />
             )}
@@ -224,7 +227,24 @@ export function SystemHealthTab({
         </div>
         
         <div className="rounded-2xl border p-6" style={{ borderColor: 'var(--border)', backgroundColor: 'var(--card)' }}>
-          {ablyStats.messagesThisMonth < 0 ? (
+          {ablyStats.status === 'permission_denied' ? (
+            <div className="space-y-2">
+              <p className="text-sm font-semibold text-orange-500">Action Not Permitted (40160)</p>
+              <p className="text-xs leading-relaxed" style={{ color: 'var(--muted-foreground)' }}>
+                Your Ably API key does not have the <code className="bg-muted px-1 rounded">statistics</code> capability enabled. 
+                Enable it in your Ably Dashboard to view real-time message usage metrics.
+              </p>
+              <a 
+                href="https://ably.com/dashboard" 
+                target="_blank" 
+                rel="noreferrer"
+                className="inline-block mt-1 text-xs font-bold underline underline-offset-4"
+                style={{ color: 'var(--primary)' }}
+              >
+                Go to Ably Dashboard ↗
+              </a>
+            </div>
+          ) : ablyStats.status === 'error' ? (
             <p className="text-sm text-red-500">Failed to fetch Ably quota. Check your API key.</p>
           ) : (
             <>

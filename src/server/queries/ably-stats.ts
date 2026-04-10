@@ -8,6 +8,7 @@ export type AblyStats = {
   remaining: number
   percentUsed: number
   cachedAt: string
+  status: 'ok' | 'error' | 'permission_denied'
 }
 
 /**
@@ -26,12 +27,16 @@ export const getAblyStats = unstable_cache(
         remaining: 6_000_000,
         percentUsed: 0,
         cachedAt: new Date().toISOString(),
+        status: 'error',
       }
     }
 
     try {
       // Use REST SDK — stateless HTTP, no WebSocket needed server-side
-      const rest = new Ably.Rest({ key: apiKey })
+      const rest = new Ably.Rest({
+        key: apiKey,
+        logLevel: 1, // Only log errors, suppress warnings (like permission issues)
+      })
 
       const [monthPage, dayPage] = await Promise.all([
         rest.stats({ unit: 'month', limit: 1, direction: 'backwards' } as Parameters<typeof rest.stats>[0]),
@@ -45,11 +50,7 @@ export const getAblyStats = unstable_cache(
       const month = monthPage.items[0] as unknown as AblyStatItem
       const day   = dayPage.items[0] as unknown as AblyStatItem
 
-      // Ably free tier: 6,000,000 messages/month
-      // Override via ABLY_MONTHLY_LIMIT env var if on a paid plan
       const LIMIT = Number(process.env.ABLY_MONTHLY_LIMIT ?? 6_000_000)
-
-      // inbound.all.messages.count = messages published by clients into Ably
       const used = month?.inbound?.all?.messages?.count ?? 0
       const today = day?.inbound?.all?.messages?.count ?? 0
 
@@ -60,16 +61,27 @@ export const getAblyStats = unstable_cache(
         remaining:         Math.max(0, LIMIT - used),
         percentUsed:       Math.min(100, Math.round((used / LIMIT) * 100)),
         cachedAt:          new Date().toISOString(),
+        status:            'ok',
       }
-    } catch (err) {
-      console.error('[getAblyStats] Failed to fetch Ably stats:', err)
+    } catch (err: unknown) {
+      // Ably error 40160 = "action not permitted" (missing statistics capability)
+      const error = err as { code?: number; statusCode?: number }
+      const isPermissionDenied = error.code === 40160 || error.statusCode === 401
+
+      if (isPermissionDenied) {
+        console.warn('[getAblyStats] Ably API key lacks "statistics" capability.')
+      } else {
+        console.error('[getAblyStats] Failed to fetch Ably stats:', err)
+      }
+
       return {
-        messagesThisMonth: -1, // -1 signals fetch error in UI
+        messagesThisMonth: -1,
         messagesToday: -1,
         limit: 6_000_000,
         remaining: -1,
         percentUsed: 0,
         cachedAt: new Date().toISOString(),
+        status: isPermissionDenied ? 'permission_denied' : 'error',
       }
     }
   },

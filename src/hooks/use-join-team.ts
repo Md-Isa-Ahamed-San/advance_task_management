@@ -9,7 +9,7 @@ export function useJoinTeam() {
   const router = useRouter()
   return useMutation({
     mutationFn: (inviteCode: string) => joinTeamWithCode(inviteCode),
-    onSuccess: (data) => {
+    onSuccess: () => {
       toast.success('Successfully joined the team!')
       router.refresh()
     },
