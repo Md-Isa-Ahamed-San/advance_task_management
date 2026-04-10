@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { Mail, Lock, User, Eye, EyeOff, CheckSquare } from 'lucide-react'
 import { toast } from 'sonner'
 import { Button } from '@/app/components/ui/button'
@@ -10,6 +11,7 @@ import { Label } from '@/app/components/ui/label'
 import { authClient } from '~/server/better-auth/client'
 
 export function SignUpForm() {
+  const router = useRouter()
   const [formData, setFormData] = useState({ name: '', email: '', password: '', confirmPassword: '' })
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
@@ -43,7 +45,8 @@ export function SignUpForm() {
         callbackURL: '/home',
       })
       if (signUpError) throw new Error(signUpError.message ?? 'Registration failed')
-      toast.success('Account created! Welcome to TaskFlow.')
+      toast.success('Account created! Please sign in.')
+      router.push('/login')
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Registration failed'
       setError(message)

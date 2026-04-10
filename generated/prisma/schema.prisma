@@ -128,9 +128,10 @@ model Task {
 }
 
 model Team {
-  id        String   @id @default(cuid())
-  name      String
-  createdAt DateTime @default(now())
+  id         String   @id @default(cuid())
+  name       String
+  inviteCode String?  @unique
+  createdAt  DateTime @default(now())
 
   createdById String
   createdBy   User   @relation("TeamOwner", fields: [createdById], references: [id])

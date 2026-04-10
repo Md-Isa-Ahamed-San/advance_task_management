@@ -194,3 +194,71 @@ export async function saveTeamMessage(teamId: string, content: string) {
   revalidateTag('teams')
   return { success: true }
 }
+
+/**
+ * Leave a team — any member except OWNER.
+ */
+export async function leaveTeam(teamId: string) {
+  const session = await requireAuth()
+  const member = await requireTeamRole(teamId, session.user.id)
+
+  if (member.role === 'OWNER') {
+    throw new Error('Owner cannot leave the team. Transfer ownership or delete the team instead.')
+  }
+
+  await db.teamMember.delete({
+    where: { teamId_userId: { teamId, userId: session.user.id } },
+  })
+
+  revalidateTag('teams')
+  await logActivity(session.user.id, 'team.left', teamId)
+
+  return { success: true }
+}
+
+/**
+ * Generate a new invite code for a team — OWNER or ADMIN only.
+ */
+export async function generateInviteCode(teamId: string) {
+  const session = await requireAuth()
+  await requireTeamRole(teamId, session.user.id, ['OWNER', 'ADMIN'])
+
+  const inviteCode = Math.random().toString(36).substring(2, 10).toUpperCase()
+
+  await db.team.update({
+    where: { id: teamId },
+    data: { inviteCode },
+  })
+
+  revalidateTag('teams')
+  return { success: true, inviteCode }
+}
+
+/**
+ * Join a team using an invite code.
+ */
+export async function joinTeamWithCode(inviteCode: string) {
+  const session = await requireAuth()
+  const trimmed = inviteCode.trim().toUpperCase()
+
+  const team = await db.team.findUnique({
+    where: { inviteCode: trimmed },
+  })
+
+  if (!team) throw new Error('Invalid invite code')
+
+  const existing = await db.teamMember.findUnique({
+    where: { teamId_userId: { teamId: team.id, userId: session.user.id } },
+  })
+
+  if (existing) throw new Error('You already belong to this team')
+
+  await db.teamMember.create({
+    data: { teamId: team.id, userId: session.user.id, role: 'MEMBER' },
+  })
+
+  revalidateTag('teams')
+  await logActivity(session.user.id, 'team.joined_via_code', team.id)
+
+  return { success: true, teamId: team.id }
+}

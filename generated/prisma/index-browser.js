@@ -185,6 +185,7 @@ exports.Prisma.TaskScalarFieldEnum = {
 exports.Prisma.TeamScalarFieldEnum = {
   id: 'id',
   name: 'name',
+  inviteCode: 'inviteCode',
   createdAt: 'createdAt',
   createdById: 'createdById'
 };

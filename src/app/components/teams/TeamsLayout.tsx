@@ -11,6 +11,9 @@ import type { MemberRole } from '../../../../generated/prisma'
 import { useDeleteTeam } from '../../../hooks/use-delete-team'
 import { Button } from '../ui/button'
 import { TeamChat } from './TeamChat'
+import { JoinTeamModal } from './JoinTeamModal'
+import { useGenerateInviteCode } from '~/hooks/use-generate-invite-code'
+import { Ticket } from 'lucide-react'
 
 interface TeamMemberWithUser {
   role: MemberRole
@@ -22,6 +25,7 @@ interface TeamMemberWithUser {
 interface Team {
   id: string
   name: string
+  inviteCode?: string | null
   _count: { tasks: number; messages: number }
   members: TeamMemberWithUser[]
 }
@@ -38,9 +42,11 @@ export function TeamsLayout({ teams, currentUserId }: TeamsLayoutProps) {
     teams[0]?.id ?? null,
   )
   const [addMemberOpen, setAddMemberOpen] = useState(false)
+  const [joinTeamOpen, setJoinTeamOpen] = useState(false)
   const [activeTab, setActiveTab] = useState<ActiveTab>('tasks')
 
   const deleteTeam = useDeleteTeam()
+  const generateCode = useGenerateInviteCode()
 
   const selectedTeam = teams.find((t) => t.id === selectedTeamId) ?? null
   const myRole =
@@ -57,7 +63,17 @@ export function TeamsLayout({ teams, currentUserId }: TeamsLayoutProps) {
         {/* Header */}
         <div className="flex items-center justify-between border-b px-4 py-4" style={{ borderColor: 'var(--border)' }}>
           <h2 className="text-sm font-semibold" style={{ color: 'var(--foreground)' }}>Teams</h2>
-          <CreateTeamButton />
+          <div className="flex gap-1.5">
+            <button
+              onClick={() => setJoinTeamOpen(true)}
+              className="flex items-center justify-center p-1.5 rounded-lg border hover:bg-muted transition-colors"
+              title="Join team"
+              style={{ borderColor: 'var(--border)', color: 'var(--muted-foreground)' }}
+            >
+              <Ticket className="h-4 w-4" />
+            </button>
+            <CreateTeamButton />
+          </div>
         </div>
 
         {/* Team list */}
@@ -108,6 +124,11 @@ export function TeamsLayout({ teams, currentUserId }: TeamsLayoutProps) {
                   {selectedTeam.members.length} member{selectedTeam.members.length !== 1 ? 's' : ''}
                   {' · '}
                   {myRole.toLowerCase()}
+                  {canManage && selectedTeam.inviteCode && (
+                    <span className="ml-2 font-mono text-[10px] bg-muted px-1.5 py-0.5 rounded border border-border">
+                      Code: {selectedTeam.inviteCode}
+                    </span>
+                  )}
                 </p>
               </div>
             </div>
@@ -122,6 +143,19 @@ export function TeamsLayout({ teams, currentUserId }: TeamsLayoutProps) {
                 >
                   <UserPlus className="h-4 w-4" />
                   <span className="hidden sm:inline">Add member</span>
+                </Button>
+              )}
+              {canManage && !selectedTeam.inviteCode && (
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={() => generateCode.mutate(selectedTeam.id)}
+                  disabled={generateCode.isPending}
+                  className="gap-1.5 px-2 md:px-3"
+                  title="Generate invite code"
+                >
+                  <Ticket className="h-4 w-4" />
+                  <span className="hidden sm:inline">Get Code</span>
                 </Button>
               )}
               {myRole === 'OWNER' && (
@@ -187,9 +221,12 @@ export function TeamsLayout({ teams, currentUserId }: TeamsLayoutProps) {
         </div>
       )}
 
-      {/* Add member modal */}
+      {/* Modals */}
       {addMemberOpen && selectedTeam && (
         <AddMemberModal teamId={selectedTeam.id} onClose={() => setAddMemberOpen(false)} />
+      )}
+      {joinTeamOpen && (
+        <JoinTeamModal onClose={() => setJoinTeamOpen(false)} />
       )}
     </div>
   )

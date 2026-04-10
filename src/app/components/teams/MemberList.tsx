@@ -1,8 +1,9 @@
 'use client'
 
-import { Crown, Shield, User, Trash2 } from 'lucide-react'
+import { Crown, Shield, User, Trash2, LogOut } from 'lucide-react'
 import type { MemberRole } from '../../../../generated/prisma'
 import { useRemoveMember } from '~/hooks/use-remove-member'
+import { useLeaveTeam } from '~/hooks/use-leave-team'
 
 interface Member {
   role: MemberRole
@@ -26,6 +27,7 @@ const ROLE_ICON: Record<MemberRole, React.ReactNode> = {
 
 export function MemberList({ members, currentUserId, currentUserRole, teamId }: MemberListProps) {
   const removeMember = useRemoveMember(teamId)
+  const leaveTeam = useLeaveTeam()
   const canManage = currentUserRole === 'OWNER' || currentUserRole === 'ADMIN'
 
   return (
@@ -85,6 +87,23 @@ export function MemberList({ members, currentUserId, currentUserRole, teamId }: 
                 style={{ color: 'var(--destructive)' }}
               >
                 <Trash2 className="h-4 w-4" />
+              </button>
+            )}
+
+            {/* Leave button for self (if not owner) */}
+            {isMe && member.role !== 'OWNER' && (
+              <button
+                onClick={() => {
+                  if (confirm('Are you sure you want to leave this team?')) {
+                    leaveTeam.mutate(teamId)
+                  }
+                }}
+                disabled={leaveTeam.isPending}
+                className="rounded p-1.5 transition-colors hover:opacity-70 disabled:opacity-40"
+                title="Leave team"
+                style={{ color: 'var(--destructive)' }}
+              >
+                <LogOut className="h-4 w-4" />
               </button>
             )}
           </li>
