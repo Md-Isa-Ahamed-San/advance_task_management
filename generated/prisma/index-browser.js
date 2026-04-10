@@ -190,6 +190,16 @@ exports.Prisma.TeamScalarFieldEnum = {
   createdById: 'createdById'
 };
 
+exports.Prisma.TeamInvitationScalarFieldEnum = {
+  id: 'id',
+  email: 'email',
+  teamId: 'teamId',
+  role: 'role',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.TeamMemberScalarFieldEnum = {
   id: 'id',
   role: 'role',
@@ -253,6 +263,12 @@ exports.MemberRole = exports.$Enums.MemberRole = {
   MEMBER: 'MEMBER'
 };
 
+exports.InvitationStatus = exports.$Enums.InvitationStatus = {
+  PENDING: 'PENDING',
+  ACCEPTED: 'ACCEPTED',
+  REJECTED: 'REJECTED'
+};
+
 exports.Prisma.ModelName = {
   User: 'User',
   Session: 'Session',
@@ -260,6 +276,7 @@ exports.Prisma.ModelName = {
   Verification: 'Verification',
   Task: 'Task',
   Team: 'Team',
+  TeamInvitation: 'TeamInvitation',
   TeamMember: 'TeamMember',
   TeamMessage: 'TeamMessage',
   ActivityLog: 'ActivityLog'

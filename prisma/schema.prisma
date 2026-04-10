@@ -27,6 +27,12 @@ enum MemberRole {
   MEMBER
 }
 
+enum InvitationStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+}
+
 // ─────────────────────────────────────────
 // Better Auth Models (required by better-auth)
 // ─────────────────────────────────────────
@@ -136,11 +142,27 @@ model Team {
   createdById String
   createdBy   User   @relation("TeamOwner", fields: [createdById], references: [id])
 
-  members  TeamMember[]
-  messages TeamMessage[]
-  tasks    Task[]
+  members     TeamMember[]
+  messages    TeamMessage[]
+  tasks       Task[]
+  invitations TeamInvitation[]
 
   @@map("team")
+}
+
+model TeamInvitation {
+  id        String           @id @default(cuid())
+  email     String
+  teamId    String
+  role      MemberRole       @default(MEMBER)
+  status    InvitationStatus @default(PENDING)
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
+
+  team Team @relation(fields: [teamId], references: [id], onDelete: Cascade)
+
+  @@unique([teamId, email])
+  @@map("team_invitation")
 }
 
 model TeamMember {

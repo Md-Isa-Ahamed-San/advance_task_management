@@ -106,27 +106,111 @@ export async function deleteTeam(teamId: string) {
 }
 
 /**
- * Add a member by email — OWNER or ADMIN.
+ * Invite a member by email — OWNER or ADMIN.
+ * Creates a TeamInvitation instead of adding directly.
  */
-export async function addMember(teamId: string, email: string) {
+export async function inviteMember(teamId: string, email: string) {
   const session = await requireAuth()
   await requireTeamRole(teamId, session.user.id, ['OWNER', 'ADMIN'])
 
-  const user = await db.user.findUnique({ where: { email } })
-  if (!user) throw new Error(`No account found for "${email}"`)
+  const userEmail = email.trim().toLowerCase()
 
-  const existing = await db.teamMember.findUnique({
-    where: { teamId_userId: { teamId, userId: user.id } },
+  // Check if already a member
+  const existingMember = await db.teamMember.findFirst({
+    where: {
+      teamId,
+      user: { email: userEmail },
+    },
   })
-  if (existing) throw new Error('User is already a member')
+  if (existingMember) throw new Error('User is already a member')
 
-  await db.teamMember.create({
-    data: { teamId, userId: user.id, role: 'MEMBER' },
+  // Check if already invited (pending)
+  const existingInvite = await db.teamInvitation.findUnique({
+    where: { teamId_email: { teamId, email: userEmail } },
+  })
+  if (existingInvite && existingInvite.status === 'PENDING') {
+    throw new Error('Invitation already sent and pending')
+  }
+
+  // Create or upsert invitation
+  await db.teamInvitation.upsert({
+    where: { teamId_email: { teamId, email: userEmail } },
+    update: { status: 'PENDING', role: 'MEMBER' },
+    create: { teamId, email: userEmail, role: 'MEMBER' },
   })
 
   revalidateTag('teams')
-  await logActivity(session.user.id, 'team.member_added', teamId, { email })
+  await logActivity(session.user.id, 'team.member_invited', teamId, { email: userEmail })
 
+  return { success: true }
+}
+
+/**
+ * Get all pending invitations for the current user's email.
+ */
+export async function getPendingInvitations() {
+  const session = await requireAuth()
+  const invitations = await db.teamInvitation.findMany({
+    where: {
+      email: session.user.email,
+      status: 'PENDING',
+    },
+    include: {
+      team: {
+        select: { id: true, name: true },
+      },
+    },
+    orderBy: { createdAt: 'desc' },
+  })
+  return invitations
+}
+
+/**
+ * Accept or Reject an invitation.
+ */
+export async function respondToInvitation(invitationId: string, accept: boolean) {
+  const session = await requireAuth()
+
+  const invitation = await db.teamInvitation.findUnique({
+    where: { id: invitationId },
+    include: { team: true },
+  })
+
+  if (!invitation) throw new Error('Invitation not found')
+  if (invitation.email !== session.user.email) throw new Error('Unauthorized')
+  if (invitation.status !== 'PENDING') throw new Error('Invitation already processed')
+
+  if (accept) {
+    // Check if user already in team (safety)
+    const existing = await db.teamMember.findUnique({
+      where: { teamId_userId: { teamId: invitation.teamId, userId: session.user.id } },
+    })
+
+    if (!existing) {
+      await db.teamMember.create({
+        data: {
+          teamId: invitation.teamId,
+          userId: session.user.id,
+          role: invitation.role,
+        },
+      })
+    }
+
+    await db.teamInvitation.update({
+      where: { id: invitationId },
+      data: { status: 'ACCEPTED' },
+    })
+
+    await logActivity(session.user.id, 'team.invitation_accepted', invitation.teamId)
+  } else {
+    await db.teamInvitation.update({
+      where: { id: invitationId },
+      data: { status: 'REJECTED' },
+    })
+    await logActivity(session.user.id, 'team.invitation_rejected', invitation.teamId)
+  }
+
+  revalidateTag('teams')
   return { success: true }
 }
 

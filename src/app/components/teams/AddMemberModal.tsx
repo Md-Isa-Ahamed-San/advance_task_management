@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { UserPlus, X } from 'lucide-react'
-import { useAddMember } from '~/hooks/use-add-member'
+import { useInviteMember } from '~/hooks/use-invitations'
 import { Button } from '../ui/button'
 import { Input } from '../ui/input'
 import { Label } from '../ui/label'
@@ -15,7 +15,7 @@ interface AddMemberModalProps {
 export function AddMemberModal({ teamId, onClose }: AddMemberModalProps) {
   const [email, setEmail] = useState('')
   const [error, setError] = useState('')
-  const addMember = useAddMember(teamId)
+  const inviteMember = useInviteMember(teamId)
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -27,7 +27,7 @@ export function AddMemberModal({ teamId, onClose }: AddMemberModalProps) {
       return
     }
 
-    addMember.mutate(email, {
+    inviteMember.mutate(email, {
       onSuccess: () => {
         setEmail('')
         onClose()
@@ -47,7 +47,7 @@ export function AddMemberModal({ teamId, onClose }: AddMemberModalProps) {
         style={{ borderColor: 'var(--border)', backgroundColor: 'var(--card)' }}
       >
         <div className="flex items-center justify-between border-b px-6 py-4" style={{ borderColor: 'var(--border)' }}>
-          <h2 className="text-lg font-semibold" style={{ color: 'var(--foreground)' }}>Add member</h2>
+          <h2 className="text-lg font-semibold" style={{ color: 'var(--foreground)' }}>Invite member</h2>
           <button onClick={onClose} style={{ color: 'var(--muted-foreground)' }}>
             <X className="h-5 w-5" />
           </button>
@@ -68,20 +68,20 @@ export function AddMemberModal({ teamId, onClose }: AddMemberModalProps) {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="colleague@example.com"
-              disabled={addMember.isPending}
+              disabled={inviteMember.isPending}
               autoFocus
             />
             <p className="text-xs" style={{ color: 'var(--muted-foreground)' }}>
-              They must already have a TaskFlow account.
+              They will receive an invitation to join this team.
             </p>
           </div>
           <div className="flex justify-end gap-2 pt-1">
-            <Button type="button" variant="outline" onClick={onClose} disabled={addMember.isPending}>
+            <Button type="button" variant="outline" onClick={onClose} disabled={inviteMember.isPending}>
               Cancel
             </Button>
-            <Button type="submit" disabled={addMember.isPending} className="gap-1.5">
+            <Button type="submit" disabled={inviteMember.isPending} className="gap-1.5">
               <UserPlus className="h-4 w-4" />
-              {addMember.isPending ? 'Adding…' : 'Add member'}
+              {inviteMember.isPending ? 'Inviting…' : 'Invite member'}
             </Button>
           </div>
         </form>

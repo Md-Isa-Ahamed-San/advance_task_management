@@ -13,7 +13,10 @@ import { Button } from '../ui/button'
 import { TeamChat } from './TeamChat'
 import { JoinTeamModal } from './JoinTeamModal'
 import { useGenerateInviteCode } from '~/hooks/use-generate-invite-code'
-import { Ticket } from 'lucide-react'
+import { Ticket, Copy, Check } from 'lucide-react'
+import { toast } from 'sonner'
+import { InvitationList } from './InvitationList'
+
 
 interface TeamMemberWithUser {
   role: MemberRole
@@ -48,10 +51,19 @@ export function TeamsLayout({ teams, currentUserId }: TeamsLayoutProps) {
   const deleteTeam = useDeleteTeam()
   const generateCode = useGenerateInviteCode()
 
+  const [copied, setCopied] = useState(false)
+
   const selectedTeam = teams.find((t) => t.id === selectedTeamId) ?? null
   const myRole =
     selectedTeam?.members.find((m) => m.userId === currentUserId)?.role ?? 'MEMBER'
   const canManage = myRole === 'OWNER' || myRole === 'ADMIN'
+
+  const copyToClipboard = (code: string) => {
+    void navigator.clipboard.writeText(code)
+    setCopied(true)
+    toast.success('Invite code copied to clipboard!')
+    setTimeout(() => setCopied(false), 2000)
+  }
 
   return (
     <div className="flex h-full max-w-[1400px] mx-auto">
@@ -75,6 +87,9 @@ export function TeamsLayout({ teams, currentUserId }: TeamsLayoutProps) {
             <CreateTeamButton />
           </div>
         </div>
+
+        {/* Invitations Section */}
+        <InvitationList />
 
         {/* Team list */}
         <div className="flex-1 overflow-y-auto p-3 space-y-2">
@@ -125,9 +140,18 @@ export function TeamsLayout({ teams, currentUserId }: TeamsLayoutProps) {
                   {' · '}
                   {myRole.toLowerCase()}
                   {canManage && selectedTeam.inviteCode && (
-                    <span className="ml-2 font-mono text-[10px] bg-muted px-1.5 py-0.5 rounded border border-border">
+                    <button
+                      onClick={() => copyToClipboard(selectedTeam.inviteCode!)}
+                      className="ml-2 group flex items-center gap-1.5 font-mono text-[10px] bg-muted hover:bg-muted/80 px-2 py-0.5 rounded border border-border transition-colors"
+                      title="Click to copy invite code"
+                    >
                       Code: {selectedTeam.inviteCode}
-                    </span>
+                      {copied ? (
+                        <Check className="h-2.5 w-2.5 text-green-500" />
+                      ) : (
+                        <Copy className="h-2.5 w-2.5 opacity-0 group-hover:opacity-100 transition-opacity" />
+                      )}
+                    </button>
                   )}
                 </p>
               </div>

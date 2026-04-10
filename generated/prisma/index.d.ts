@@ -44,6 +44,11 @@ export type Task = $Result.DefaultSelection<Prisma.$TaskPayload>
  */
 export type Team = $Result.DefaultSelection<Prisma.$TeamPayload>
 /**
+ * Model TeamInvitation
+ * 
+ */
+export type TeamInvitation = $Result.DefaultSelection<Prisma.$TeamInvitationPayload>
+/**
  * Model TeamMember
  * 
  */
@@ -80,6 +85,15 @@ export const MemberRole: {
 
 export type MemberRole = (typeof MemberRole)[keyof typeof MemberRole]
 
+
+export const InvitationStatus: {
+  PENDING: 'PENDING',
+  ACCEPTED: 'ACCEPTED',
+  REJECTED: 'REJECTED'
+};
+
+export type InvitationStatus = (typeof InvitationStatus)[keyof typeof InvitationStatus]
+
 }
 
 export type Priority = $Enums.Priority
@@ -89,6 +103,10 @@ export const Priority: typeof $Enums.Priority
 export type MemberRole = $Enums.MemberRole
 
 export const MemberRole: typeof $Enums.MemberRole
+
+export type InvitationStatus = $Enums.InvitationStatus
+
+export const InvitationStatus: typeof $Enums.InvitationStatus
 
 /**
  * ##  Prisma Client ʲˢ
@@ -267,6 +285,16 @@ export class PrismaClient<
     * ```
     */
   get team(): Prisma.TeamDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.teamInvitation`: Exposes CRUD operations for the **TeamInvitation** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more TeamInvitations
+    * const teamInvitations = await prisma.teamInvitation.findMany()
+    * ```
+    */
+  get teamInvitation(): Prisma.TeamInvitationDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.teamMember`: Exposes CRUD operations for the **TeamMember** model.
@@ -744,6 +772,7 @@ export namespace Prisma {
     Verification: 'Verification',
     Task: 'Task',
     Team: 'Team',
+    TeamInvitation: 'TeamInvitation',
     TeamMember: 'TeamMember',
     TeamMessage: 'TeamMessage',
     ActivityLog: 'ActivityLog'
@@ -765,7 +794,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "session" | "account" | "verification" | "task" | "team" | "teamMember" | "teamMessage" | "activityLog"
+      modelProps: "user" | "session" | "account" | "verification" | "task" | "team" | "teamInvitation" | "teamMember" | "teamMessage" | "activityLog"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1213,6 +1242,80 @@ export namespace Prisma {
           }
         }
       }
+      TeamInvitation: {
+        payload: Prisma.$TeamInvitationPayload<ExtArgs>
+        fields: Prisma.TeamInvitationFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.TeamInvitationFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TeamInvitationPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.TeamInvitationFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TeamInvitationPayload>
+          }
+          findFirst: {
+            args: Prisma.TeamInvitationFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TeamInvitationPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.TeamInvitationFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TeamInvitationPayload>
+          }
+          findMany: {
+            args: Prisma.TeamInvitationFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TeamInvitationPayload>[]
+          }
+          create: {
+            args: Prisma.TeamInvitationCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TeamInvitationPayload>
+          }
+          createMany: {
+            args: Prisma.TeamInvitationCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.TeamInvitationCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TeamInvitationPayload>[]
+          }
+          delete: {
+            args: Prisma.TeamInvitationDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TeamInvitationPayload>
+          }
+          update: {
+            args: Prisma.TeamInvitationUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TeamInvitationPayload>
+          }
+          deleteMany: {
+            args: Prisma.TeamInvitationDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.TeamInvitationUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.TeamInvitationUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TeamInvitationPayload>[]
+          }
+          upsert: {
+            args: Prisma.TeamInvitationUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TeamInvitationPayload>
+          }
+          aggregate: {
+            args: Prisma.TeamInvitationAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateTeamInvitation>
+          }
+          groupBy: {
+            args: Prisma.TeamInvitationGroupByArgs<ExtArgs>
+            result: $Utils.Optional<TeamInvitationGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.TeamInvitationCountArgs<ExtArgs>
+            result: $Utils.Optional<TeamInvitationCountAggregateOutputType> | number
+          }
+        }
+      }
       TeamMember: {
         payload: Prisma.$TeamMemberPayload<ExtArgs>
         fields: Prisma.TeamMemberFieldRefs
@@ -1537,6 +1640,7 @@ export namespace Prisma {
     verification?: VerificationOmit
     task?: TaskOmit
     team?: TeamOmit
+    teamInvitation?: TeamInvitationOmit
     teamMember?: TeamMemberOmit
     teamMessage?: TeamMessageOmit
     activityLog?: ActivityLogOmit
@@ -1708,12 +1812,14 @@ export namespace Prisma {
     members: number
     messages: number
     tasks: number
+    invitations: number
   }
 
   export type TeamCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     members?: boolean | TeamCountOutputTypeCountMembersArgs
     messages?: boolean | TeamCountOutputTypeCountMessagesArgs
     tasks?: boolean | TeamCountOutputTypeCountTasksArgs
+    invitations?: boolean | TeamCountOutputTypeCountInvitationsArgs
   }
 
   // Custom InputTypes
@@ -1746,6 +1852,13 @@ export namespace Prisma {
    */
   export type TeamCountOutputTypeCountTasksArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: TaskWhereInput
+  }
+
+  /**
+   * TeamCountOutputType without action
+   */
+  export type TeamCountOutputTypeCountInvitationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TeamInvitationWhereInput
   }
 
 
@@ -7628,6 +7741,7 @@ export namespace Prisma {
     members?: boolean | Team$membersArgs<ExtArgs>
     messages?: boolean | Team$messagesArgs<ExtArgs>
     tasks?: boolean | Team$tasksArgs<ExtArgs>
+    invitations?: boolean | Team$invitationsArgs<ExtArgs>
     _count?: boolean | TeamCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["team"]>
 
@@ -7663,6 +7777,7 @@ export namespace Prisma {
     members?: boolean | Team$membersArgs<ExtArgs>
     messages?: boolean | Team$messagesArgs<ExtArgs>
     tasks?: boolean | Team$tasksArgs<ExtArgs>
+    invitations?: boolean | Team$invitationsArgs<ExtArgs>
     _count?: boolean | TeamCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type TeamIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -7679,6 +7794,7 @@ export namespace Prisma {
       members: Prisma.$TeamMemberPayload<ExtArgs>[]
       messages: Prisma.$TeamMessagePayload<ExtArgs>[]
       tasks: Prisma.$TaskPayload<ExtArgs>[]
+      invitations: Prisma.$TeamInvitationPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -8084,6 +8200,7 @@ export namespace Prisma {
     members<T extends Team$membersArgs<ExtArgs> = {}>(args?: Subset<T, Team$membersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TeamMemberPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     messages<T extends Team$messagesArgs<ExtArgs> = {}>(args?: Subset<T, Team$messagesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TeamMessagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     tasks<T extends Team$tasksArgs<ExtArgs> = {}>(args?: Subset<T, Team$tasksArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TaskPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    invitations<T extends Team$invitationsArgs<ExtArgs> = {}>(args?: Subset<T, Team$invitationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TeamInvitationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -8586,6 +8703,30 @@ export namespace Prisma {
   }
 
   /**
+   * Team.invitations
+   */
+  export type Team$invitationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TeamInvitation
+     */
+    select?: TeamInvitationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TeamInvitation
+     */
+    omit?: TeamInvitationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TeamInvitationInclude<ExtArgs> | null
+    where?: TeamInvitationWhereInput
+    orderBy?: TeamInvitationOrderByWithRelationInput | TeamInvitationOrderByWithRelationInput[]
+    cursor?: TeamInvitationWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: TeamInvitationScalarFieldEnum | TeamInvitationScalarFieldEnum[]
+  }
+
+  /**
    * Team without action
    */
   export type TeamDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -8601,6 +8742,1090 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: TeamInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model TeamInvitation
+   */
+
+  export type AggregateTeamInvitation = {
+    _count: TeamInvitationCountAggregateOutputType | null
+    _min: TeamInvitationMinAggregateOutputType | null
+    _max: TeamInvitationMaxAggregateOutputType | null
+  }
+
+  export type TeamInvitationMinAggregateOutputType = {
+    id: string | null
+    email: string | null
+    teamId: string | null
+    role: $Enums.MemberRole | null
+    status: $Enums.InvitationStatus | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type TeamInvitationMaxAggregateOutputType = {
+    id: string | null
+    email: string | null
+    teamId: string | null
+    role: $Enums.MemberRole | null
+    status: $Enums.InvitationStatus | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type TeamInvitationCountAggregateOutputType = {
+    id: number
+    email: number
+    teamId: number
+    role: number
+    status: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type TeamInvitationMinAggregateInputType = {
+    id?: true
+    email?: true
+    teamId?: true
+    role?: true
+    status?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type TeamInvitationMaxAggregateInputType = {
+    id?: true
+    email?: true
+    teamId?: true
+    role?: true
+    status?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type TeamInvitationCountAggregateInputType = {
+    id?: true
+    email?: true
+    teamId?: true
+    role?: true
+    status?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type TeamInvitationAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which TeamInvitation to aggregate.
+     */
+    where?: TeamInvitationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TeamInvitations to fetch.
+     */
+    orderBy?: TeamInvitationOrderByWithRelationInput | TeamInvitationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: TeamInvitationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TeamInvitations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TeamInvitations.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned TeamInvitations
+    **/
+    _count?: true | TeamInvitationCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: TeamInvitationMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: TeamInvitationMaxAggregateInputType
+  }
+
+  export type GetTeamInvitationAggregateType<T extends TeamInvitationAggregateArgs> = {
+        [P in keyof T & keyof AggregateTeamInvitation]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateTeamInvitation[P]>
+      : GetScalarType<T[P], AggregateTeamInvitation[P]>
+  }
+
+
+
+
+  export type TeamInvitationGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TeamInvitationWhereInput
+    orderBy?: TeamInvitationOrderByWithAggregationInput | TeamInvitationOrderByWithAggregationInput[]
+    by: TeamInvitationScalarFieldEnum[] | TeamInvitationScalarFieldEnum
+    having?: TeamInvitationScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: TeamInvitationCountAggregateInputType | true
+    _min?: TeamInvitationMinAggregateInputType
+    _max?: TeamInvitationMaxAggregateInputType
+  }
+
+  export type TeamInvitationGroupByOutputType = {
+    id: string
+    email: string
+    teamId: string
+    role: $Enums.MemberRole
+    status: $Enums.InvitationStatus
+    createdAt: Date
+    updatedAt: Date
+    _count: TeamInvitationCountAggregateOutputType | null
+    _min: TeamInvitationMinAggregateOutputType | null
+    _max: TeamInvitationMaxAggregateOutputType | null
+  }
+
+  type GetTeamInvitationGroupByPayload<T extends TeamInvitationGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<TeamInvitationGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof TeamInvitationGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], TeamInvitationGroupByOutputType[P]>
+            : GetScalarType<T[P], TeamInvitationGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type TeamInvitationSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    email?: boolean
+    teamId?: boolean
+    role?: boolean
+    status?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    team?: boolean | TeamDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["teamInvitation"]>
+
+  export type TeamInvitationSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    email?: boolean
+    teamId?: boolean
+    role?: boolean
+    status?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    team?: boolean | TeamDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["teamInvitation"]>
+
+  export type TeamInvitationSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    email?: boolean
+    teamId?: boolean
+    role?: boolean
+    status?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    team?: boolean | TeamDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["teamInvitation"]>
+
+  export type TeamInvitationSelectScalar = {
+    id?: boolean
+    email?: boolean
+    teamId?: boolean
+    role?: boolean
+    status?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type TeamInvitationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "email" | "teamId" | "role" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["teamInvitation"]>
+  export type TeamInvitationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    team?: boolean | TeamDefaultArgs<ExtArgs>
+  }
+  export type TeamInvitationIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    team?: boolean | TeamDefaultArgs<ExtArgs>
+  }
+  export type TeamInvitationIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    team?: boolean | TeamDefaultArgs<ExtArgs>
+  }
+
+  export type $TeamInvitationPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "TeamInvitation"
+    objects: {
+      team: Prisma.$TeamPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      email: string
+      teamId: string
+      role: $Enums.MemberRole
+      status: $Enums.InvitationStatus
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["teamInvitation"]>
+    composites: {}
+  }
+
+  type TeamInvitationGetPayload<S extends boolean | null | undefined | TeamInvitationDefaultArgs> = $Result.GetResult<Prisma.$TeamInvitationPayload, S>
+
+  type TeamInvitationCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<TeamInvitationFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: TeamInvitationCountAggregateInputType | true
+    }
+
+  export interface TeamInvitationDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['TeamInvitation'], meta: { name: 'TeamInvitation' } }
+    /**
+     * Find zero or one TeamInvitation that matches the filter.
+     * @param {TeamInvitationFindUniqueArgs} args - Arguments to find a TeamInvitation
+     * @example
+     * // Get one TeamInvitation
+     * const teamInvitation = await prisma.teamInvitation.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends TeamInvitationFindUniqueArgs>(args: SelectSubset<T, TeamInvitationFindUniqueArgs<ExtArgs>>): Prisma__TeamInvitationClient<$Result.GetResult<Prisma.$TeamInvitationPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one TeamInvitation that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {TeamInvitationFindUniqueOrThrowArgs} args - Arguments to find a TeamInvitation
+     * @example
+     * // Get one TeamInvitation
+     * const teamInvitation = await prisma.teamInvitation.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends TeamInvitationFindUniqueOrThrowArgs>(args: SelectSubset<T, TeamInvitationFindUniqueOrThrowArgs<ExtArgs>>): Prisma__TeamInvitationClient<$Result.GetResult<Prisma.$TeamInvitationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first TeamInvitation that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TeamInvitationFindFirstArgs} args - Arguments to find a TeamInvitation
+     * @example
+     * // Get one TeamInvitation
+     * const teamInvitation = await prisma.teamInvitation.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends TeamInvitationFindFirstArgs>(args?: SelectSubset<T, TeamInvitationFindFirstArgs<ExtArgs>>): Prisma__TeamInvitationClient<$Result.GetResult<Prisma.$TeamInvitationPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first TeamInvitation that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TeamInvitationFindFirstOrThrowArgs} args - Arguments to find a TeamInvitation
+     * @example
+     * // Get one TeamInvitation
+     * const teamInvitation = await prisma.teamInvitation.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends TeamInvitationFindFirstOrThrowArgs>(args?: SelectSubset<T, TeamInvitationFindFirstOrThrowArgs<ExtArgs>>): Prisma__TeamInvitationClient<$Result.GetResult<Prisma.$TeamInvitationPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more TeamInvitations that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TeamInvitationFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all TeamInvitations
+     * const teamInvitations = await prisma.teamInvitation.findMany()
+     * 
+     * // Get first 10 TeamInvitations
+     * const teamInvitations = await prisma.teamInvitation.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const teamInvitationWithIdOnly = await prisma.teamInvitation.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends TeamInvitationFindManyArgs>(args?: SelectSubset<T, TeamInvitationFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TeamInvitationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a TeamInvitation.
+     * @param {TeamInvitationCreateArgs} args - Arguments to create a TeamInvitation.
+     * @example
+     * // Create one TeamInvitation
+     * const TeamInvitation = await prisma.teamInvitation.create({
+     *   data: {
+     *     // ... data to create a TeamInvitation
+     *   }
+     * })
+     * 
+     */
+    create<T extends TeamInvitationCreateArgs>(args: SelectSubset<T, TeamInvitationCreateArgs<ExtArgs>>): Prisma__TeamInvitationClient<$Result.GetResult<Prisma.$TeamInvitationPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many TeamInvitations.
+     * @param {TeamInvitationCreateManyArgs} args - Arguments to create many TeamInvitations.
+     * @example
+     * // Create many TeamInvitations
+     * const teamInvitation = await prisma.teamInvitation.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends TeamInvitationCreateManyArgs>(args?: SelectSubset<T, TeamInvitationCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many TeamInvitations and returns the data saved in the database.
+     * @param {TeamInvitationCreateManyAndReturnArgs} args - Arguments to create many TeamInvitations.
+     * @example
+     * // Create many TeamInvitations
+     * const teamInvitation = await prisma.teamInvitation.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many TeamInvitations and only return the `id`
+     * const teamInvitationWithIdOnly = await prisma.teamInvitation.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends TeamInvitationCreateManyAndReturnArgs>(args?: SelectSubset<T, TeamInvitationCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TeamInvitationPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a TeamInvitation.
+     * @param {TeamInvitationDeleteArgs} args - Arguments to delete one TeamInvitation.
+     * @example
+     * // Delete one TeamInvitation
+     * const TeamInvitation = await prisma.teamInvitation.delete({
+     *   where: {
+     *     // ... filter to delete one TeamInvitation
+     *   }
+     * })
+     * 
+     */
+    delete<T extends TeamInvitationDeleteArgs>(args: SelectSubset<T, TeamInvitationDeleteArgs<ExtArgs>>): Prisma__TeamInvitationClient<$Result.GetResult<Prisma.$TeamInvitationPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one TeamInvitation.
+     * @param {TeamInvitationUpdateArgs} args - Arguments to update one TeamInvitation.
+     * @example
+     * // Update one TeamInvitation
+     * const teamInvitation = await prisma.teamInvitation.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends TeamInvitationUpdateArgs>(args: SelectSubset<T, TeamInvitationUpdateArgs<ExtArgs>>): Prisma__TeamInvitationClient<$Result.GetResult<Prisma.$TeamInvitationPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more TeamInvitations.
+     * @param {TeamInvitationDeleteManyArgs} args - Arguments to filter TeamInvitations to delete.
+     * @example
+     * // Delete a few TeamInvitations
+     * const { count } = await prisma.teamInvitation.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends TeamInvitationDeleteManyArgs>(args?: SelectSubset<T, TeamInvitationDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more TeamInvitations.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TeamInvitationUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many TeamInvitations
+     * const teamInvitation = await prisma.teamInvitation.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends TeamInvitationUpdateManyArgs>(args: SelectSubset<T, TeamInvitationUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more TeamInvitations and returns the data updated in the database.
+     * @param {TeamInvitationUpdateManyAndReturnArgs} args - Arguments to update many TeamInvitations.
+     * @example
+     * // Update many TeamInvitations
+     * const teamInvitation = await prisma.teamInvitation.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more TeamInvitations and only return the `id`
+     * const teamInvitationWithIdOnly = await prisma.teamInvitation.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends TeamInvitationUpdateManyAndReturnArgs>(args: SelectSubset<T, TeamInvitationUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TeamInvitationPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one TeamInvitation.
+     * @param {TeamInvitationUpsertArgs} args - Arguments to update or create a TeamInvitation.
+     * @example
+     * // Update or create a TeamInvitation
+     * const teamInvitation = await prisma.teamInvitation.upsert({
+     *   create: {
+     *     // ... data to create a TeamInvitation
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the TeamInvitation we want to update
+     *   }
+     * })
+     */
+    upsert<T extends TeamInvitationUpsertArgs>(args: SelectSubset<T, TeamInvitationUpsertArgs<ExtArgs>>): Prisma__TeamInvitationClient<$Result.GetResult<Prisma.$TeamInvitationPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of TeamInvitations.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TeamInvitationCountArgs} args - Arguments to filter TeamInvitations to count.
+     * @example
+     * // Count the number of TeamInvitations
+     * const count = await prisma.teamInvitation.count({
+     *   where: {
+     *     // ... the filter for the TeamInvitations we want to count
+     *   }
+     * })
+    **/
+    count<T extends TeamInvitationCountArgs>(
+      args?: Subset<T, TeamInvitationCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], TeamInvitationCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a TeamInvitation.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TeamInvitationAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends TeamInvitationAggregateArgs>(args: Subset<T, TeamInvitationAggregateArgs>): Prisma.PrismaPromise<GetTeamInvitationAggregateType<T>>
+
+    /**
+     * Group by TeamInvitation.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TeamInvitationGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends TeamInvitationGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: TeamInvitationGroupByArgs['orderBy'] }
+        : { orderBy?: TeamInvitationGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, TeamInvitationGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetTeamInvitationGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the TeamInvitation model
+   */
+  readonly fields: TeamInvitationFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for TeamInvitation.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__TeamInvitationClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    team<T extends TeamDefaultArgs<ExtArgs> = {}>(args?: Subset<T, TeamDefaultArgs<ExtArgs>>): Prisma__TeamClient<$Result.GetResult<Prisma.$TeamPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the TeamInvitation model
+   */
+  interface TeamInvitationFieldRefs {
+    readonly id: FieldRef<"TeamInvitation", 'String'>
+    readonly email: FieldRef<"TeamInvitation", 'String'>
+    readonly teamId: FieldRef<"TeamInvitation", 'String'>
+    readonly role: FieldRef<"TeamInvitation", 'MemberRole'>
+    readonly status: FieldRef<"TeamInvitation", 'InvitationStatus'>
+    readonly createdAt: FieldRef<"TeamInvitation", 'DateTime'>
+    readonly updatedAt: FieldRef<"TeamInvitation", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * TeamInvitation findUnique
+   */
+  export type TeamInvitationFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TeamInvitation
+     */
+    select?: TeamInvitationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TeamInvitation
+     */
+    omit?: TeamInvitationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TeamInvitationInclude<ExtArgs> | null
+    /**
+     * Filter, which TeamInvitation to fetch.
+     */
+    where: TeamInvitationWhereUniqueInput
+  }
+
+  /**
+   * TeamInvitation findUniqueOrThrow
+   */
+  export type TeamInvitationFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TeamInvitation
+     */
+    select?: TeamInvitationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TeamInvitation
+     */
+    omit?: TeamInvitationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TeamInvitationInclude<ExtArgs> | null
+    /**
+     * Filter, which TeamInvitation to fetch.
+     */
+    where: TeamInvitationWhereUniqueInput
+  }
+
+  /**
+   * TeamInvitation findFirst
+   */
+  export type TeamInvitationFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TeamInvitation
+     */
+    select?: TeamInvitationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TeamInvitation
+     */
+    omit?: TeamInvitationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TeamInvitationInclude<ExtArgs> | null
+    /**
+     * Filter, which TeamInvitation to fetch.
+     */
+    where?: TeamInvitationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TeamInvitations to fetch.
+     */
+    orderBy?: TeamInvitationOrderByWithRelationInput | TeamInvitationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for TeamInvitations.
+     */
+    cursor?: TeamInvitationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TeamInvitations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TeamInvitations.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of TeamInvitations.
+     */
+    distinct?: TeamInvitationScalarFieldEnum | TeamInvitationScalarFieldEnum[]
+  }
+
+  /**
+   * TeamInvitation findFirstOrThrow
+   */
+  export type TeamInvitationFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TeamInvitation
+     */
+    select?: TeamInvitationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TeamInvitation
+     */
+    omit?: TeamInvitationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TeamInvitationInclude<ExtArgs> | null
+    /**
+     * Filter, which TeamInvitation to fetch.
+     */
+    where?: TeamInvitationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TeamInvitations to fetch.
+     */
+    orderBy?: TeamInvitationOrderByWithRelationInput | TeamInvitationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for TeamInvitations.
+     */
+    cursor?: TeamInvitationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TeamInvitations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TeamInvitations.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of TeamInvitations.
+     */
+    distinct?: TeamInvitationScalarFieldEnum | TeamInvitationScalarFieldEnum[]
+  }
+
+  /**
+   * TeamInvitation findMany
+   */
+  export type TeamInvitationFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TeamInvitation
+     */
+    select?: TeamInvitationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TeamInvitation
+     */
+    omit?: TeamInvitationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TeamInvitationInclude<ExtArgs> | null
+    /**
+     * Filter, which TeamInvitations to fetch.
+     */
+    where?: TeamInvitationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TeamInvitations to fetch.
+     */
+    orderBy?: TeamInvitationOrderByWithRelationInput | TeamInvitationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing TeamInvitations.
+     */
+    cursor?: TeamInvitationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TeamInvitations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TeamInvitations.
+     */
+    skip?: number
+    distinct?: TeamInvitationScalarFieldEnum | TeamInvitationScalarFieldEnum[]
+  }
+
+  /**
+   * TeamInvitation create
+   */
+  export type TeamInvitationCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TeamInvitation
+     */
+    select?: TeamInvitationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TeamInvitation
+     */
+    omit?: TeamInvitationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TeamInvitationInclude<ExtArgs> | null
+    /**
+     * The data needed to create a TeamInvitation.
+     */
+    data: XOR<TeamInvitationCreateInput, TeamInvitationUncheckedCreateInput>
+  }
+
+  /**
+   * TeamInvitation createMany
+   */
+  export type TeamInvitationCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many TeamInvitations.
+     */
+    data: TeamInvitationCreateManyInput | TeamInvitationCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * TeamInvitation createManyAndReturn
+   */
+  export type TeamInvitationCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TeamInvitation
+     */
+    select?: TeamInvitationSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the TeamInvitation
+     */
+    omit?: TeamInvitationOmit<ExtArgs> | null
+    /**
+     * The data used to create many TeamInvitations.
+     */
+    data: TeamInvitationCreateManyInput | TeamInvitationCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TeamInvitationIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * TeamInvitation update
+   */
+  export type TeamInvitationUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TeamInvitation
+     */
+    select?: TeamInvitationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TeamInvitation
+     */
+    omit?: TeamInvitationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TeamInvitationInclude<ExtArgs> | null
+    /**
+     * The data needed to update a TeamInvitation.
+     */
+    data: XOR<TeamInvitationUpdateInput, TeamInvitationUncheckedUpdateInput>
+    /**
+     * Choose, which TeamInvitation to update.
+     */
+    where: TeamInvitationWhereUniqueInput
+  }
+
+  /**
+   * TeamInvitation updateMany
+   */
+  export type TeamInvitationUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update TeamInvitations.
+     */
+    data: XOR<TeamInvitationUpdateManyMutationInput, TeamInvitationUncheckedUpdateManyInput>
+    /**
+     * Filter which TeamInvitations to update
+     */
+    where?: TeamInvitationWhereInput
+    /**
+     * Limit how many TeamInvitations to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * TeamInvitation updateManyAndReturn
+   */
+  export type TeamInvitationUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TeamInvitation
+     */
+    select?: TeamInvitationSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the TeamInvitation
+     */
+    omit?: TeamInvitationOmit<ExtArgs> | null
+    /**
+     * The data used to update TeamInvitations.
+     */
+    data: XOR<TeamInvitationUpdateManyMutationInput, TeamInvitationUncheckedUpdateManyInput>
+    /**
+     * Filter which TeamInvitations to update
+     */
+    where?: TeamInvitationWhereInput
+    /**
+     * Limit how many TeamInvitations to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TeamInvitationIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * TeamInvitation upsert
+   */
+  export type TeamInvitationUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TeamInvitation
+     */
+    select?: TeamInvitationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TeamInvitation
+     */
+    omit?: TeamInvitationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TeamInvitationInclude<ExtArgs> | null
+    /**
+     * The filter to search for the TeamInvitation to update in case it exists.
+     */
+    where: TeamInvitationWhereUniqueInput
+    /**
+     * In case the TeamInvitation found by the `where` argument doesn't exist, create a new TeamInvitation with this data.
+     */
+    create: XOR<TeamInvitationCreateInput, TeamInvitationUncheckedCreateInput>
+    /**
+     * In case the TeamInvitation was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<TeamInvitationUpdateInput, TeamInvitationUncheckedUpdateInput>
+  }
+
+  /**
+   * TeamInvitation delete
+   */
+  export type TeamInvitationDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TeamInvitation
+     */
+    select?: TeamInvitationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TeamInvitation
+     */
+    omit?: TeamInvitationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TeamInvitationInclude<ExtArgs> | null
+    /**
+     * Filter which TeamInvitation to delete.
+     */
+    where: TeamInvitationWhereUniqueInput
+  }
+
+  /**
+   * TeamInvitation deleteMany
+   */
+  export type TeamInvitationDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which TeamInvitations to delete
+     */
+    where?: TeamInvitationWhereInput
+    /**
+     * Limit how many TeamInvitations to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * TeamInvitation without action
+   */
+  export type TeamInvitationDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TeamInvitation
+     */
+    select?: TeamInvitationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TeamInvitation
+     */
+    omit?: TeamInvitationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TeamInvitationInclude<ExtArgs> | null
   }
 
 
@@ -11917,6 +13142,19 @@ export namespace Prisma {
   export type TeamScalarFieldEnum = (typeof TeamScalarFieldEnum)[keyof typeof TeamScalarFieldEnum]
 
 
+  export const TeamInvitationScalarFieldEnum: {
+    id: 'id',
+    email: 'email',
+    teamId: 'teamId',
+    role: 'role',
+    status: 'status',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type TeamInvitationScalarFieldEnum = (typeof TeamInvitationScalarFieldEnum)[keyof typeof TeamInvitationScalarFieldEnum]
+
+
   export const TeamMemberScalarFieldEnum: {
     id: 'id',
     role: 'role',
@@ -12058,6 +13296,20 @@ export namespace Prisma {
    * Reference to a field of type 'MemberRole[]'
    */
   export type ListEnumMemberRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MemberRole[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'InvitationStatus'
+   */
+  export type EnumInvitationStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'InvitationStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'InvitationStatus[]'
+   */
+  export type ListEnumInvitationStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'InvitationStatus[]'>
     
 
 
@@ -12503,6 +13755,7 @@ export namespace Prisma {
     members?: TeamMemberListRelationFilter
     messages?: TeamMessageListRelationFilter
     tasks?: TaskListRelationFilter
+    invitations?: TeamInvitationListRelationFilter
   }
 
   export type TeamOrderByWithRelationInput = {
@@ -12515,6 +13768,7 @@ export namespace Prisma {
     members?: TeamMemberOrderByRelationAggregateInput
     messages?: TeamMessageOrderByRelationAggregateInput
     tasks?: TaskOrderByRelationAggregateInput
+    invitations?: TeamInvitationOrderByRelationAggregateInput
   }
 
   export type TeamWhereUniqueInput = Prisma.AtLeast<{
@@ -12530,6 +13784,7 @@ export namespace Prisma {
     members?: TeamMemberListRelationFilter
     messages?: TeamMessageListRelationFilter
     tasks?: TaskListRelationFilter
+    invitations?: TeamInvitationListRelationFilter
   }, "id" | "inviteCode">
 
   export type TeamOrderByWithAggregationInput = {
@@ -12552,6 +13807,72 @@ export namespace Prisma {
     inviteCode?: StringNullableWithAggregatesFilter<"Team"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Team"> | Date | string
     createdById?: StringWithAggregatesFilter<"Team"> | string
+  }
+
+  export type TeamInvitationWhereInput = {
+    AND?: TeamInvitationWhereInput | TeamInvitationWhereInput[]
+    OR?: TeamInvitationWhereInput[]
+    NOT?: TeamInvitationWhereInput | TeamInvitationWhereInput[]
+    id?: StringFilter<"TeamInvitation"> | string
+    email?: StringFilter<"TeamInvitation"> | string
+    teamId?: StringFilter<"TeamInvitation"> | string
+    role?: EnumMemberRoleFilter<"TeamInvitation"> | $Enums.MemberRole
+    status?: EnumInvitationStatusFilter<"TeamInvitation"> | $Enums.InvitationStatus
+    createdAt?: DateTimeFilter<"TeamInvitation"> | Date | string
+    updatedAt?: DateTimeFilter<"TeamInvitation"> | Date | string
+    team?: XOR<TeamScalarRelationFilter, TeamWhereInput>
+  }
+
+  export type TeamInvitationOrderByWithRelationInput = {
+    id?: SortOrder
+    email?: SortOrder
+    teamId?: SortOrder
+    role?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    team?: TeamOrderByWithRelationInput
+  }
+
+  export type TeamInvitationWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    teamId_email?: TeamInvitationTeamIdEmailCompoundUniqueInput
+    AND?: TeamInvitationWhereInput | TeamInvitationWhereInput[]
+    OR?: TeamInvitationWhereInput[]
+    NOT?: TeamInvitationWhereInput | TeamInvitationWhereInput[]
+    email?: StringFilter<"TeamInvitation"> | string
+    teamId?: StringFilter<"TeamInvitation"> | string
+    role?: EnumMemberRoleFilter<"TeamInvitation"> | $Enums.MemberRole
+    status?: EnumInvitationStatusFilter<"TeamInvitation"> | $Enums.InvitationStatus
+    createdAt?: DateTimeFilter<"TeamInvitation"> | Date | string
+    updatedAt?: DateTimeFilter<"TeamInvitation"> | Date | string
+    team?: XOR<TeamScalarRelationFilter, TeamWhereInput>
+  }, "id" | "teamId_email">
+
+  export type TeamInvitationOrderByWithAggregationInput = {
+    id?: SortOrder
+    email?: SortOrder
+    teamId?: SortOrder
+    role?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: TeamInvitationCountOrderByAggregateInput
+    _max?: TeamInvitationMaxOrderByAggregateInput
+    _min?: TeamInvitationMinOrderByAggregateInput
+  }
+
+  export type TeamInvitationScalarWhereWithAggregatesInput = {
+    AND?: TeamInvitationScalarWhereWithAggregatesInput | TeamInvitationScalarWhereWithAggregatesInput[]
+    OR?: TeamInvitationScalarWhereWithAggregatesInput[]
+    NOT?: TeamInvitationScalarWhereWithAggregatesInput | TeamInvitationScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"TeamInvitation"> | string
+    email?: StringWithAggregatesFilter<"TeamInvitation"> | string
+    teamId?: StringWithAggregatesFilter<"TeamInvitation"> | string
+    role?: EnumMemberRoleWithAggregatesFilter<"TeamInvitation"> | $Enums.MemberRole
+    status?: EnumInvitationStatusWithAggregatesFilter<"TeamInvitation"> | $Enums.InvitationStatus
+    createdAt?: DateTimeWithAggregatesFilter<"TeamInvitation"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"TeamInvitation"> | Date | string
   }
 
   export type TeamMemberWhereInput = {
@@ -13196,6 +14517,7 @@ export namespace Prisma {
     members?: TeamMemberCreateNestedManyWithoutTeamInput
     messages?: TeamMessageCreateNestedManyWithoutTeamInput
     tasks?: TaskCreateNestedManyWithoutTeamInput
+    invitations?: TeamInvitationCreateNestedManyWithoutTeamInput
   }
 
   export type TeamUncheckedCreateInput = {
@@ -13207,6 +14529,7 @@ export namespace Prisma {
     members?: TeamMemberUncheckedCreateNestedManyWithoutTeamInput
     messages?: TeamMessageUncheckedCreateNestedManyWithoutTeamInput
     tasks?: TaskUncheckedCreateNestedManyWithoutTeamInput
+    invitations?: TeamInvitationUncheckedCreateNestedManyWithoutTeamInput
   }
 
   export type TeamUpdateInput = {
@@ -13218,6 +14541,7 @@ export namespace Prisma {
     members?: TeamMemberUpdateManyWithoutTeamNestedInput
     messages?: TeamMessageUpdateManyWithoutTeamNestedInput
     tasks?: TaskUpdateManyWithoutTeamNestedInput
+    invitations?: TeamInvitationUpdateManyWithoutTeamNestedInput
   }
 
   export type TeamUncheckedUpdateInput = {
@@ -13229,6 +14553,7 @@ export namespace Prisma {
     members?: TeamMemberUncheckedUpdateManyWithoutTeamNestedInput
     messages?: TeamMessageUncheckedUpdateManyWithoutTeamNestedInput
     tasks?: TaskUncheckedUpdateManyWithoutTeamNestedInput
+    invitations?: TeamInvitationUncheckedUpdateManyWithoutTeamNestedInput
   }
 
   export type TeamCreateManyInput = {
@@ -13252,6 +14577,75 @@ export namespace Prisma {
     inviteCode?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdById?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type TeamInvitationCreateInput = {
+    id?: string
+    email: string
+    role?: $Enums.MemberRole
+    status?: $Enums.InvitationStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    team: TeamCreateNestedOneWithoutInvitationsInput
+  }
+
+  export type TeamInvitationUncheckedCreateInput = {
+    id?: string
+    email: string
+    teamId: string
+    role?: $Enums.MemberRole
+    status?: $Enums.InvitationStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type TeamInvitationUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    role?: EnumMemberRoleFieldUpdateOperationsInput | $Enums.MemberRole
+    status?: EnumInvitationStatusFieldUpdateOperationsInput | $Enums.InvitationStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    team?: TeamUpdateOneRequiredWithoutInvitationsNestedInput
+  }
+
+  export type TeamInvitationUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    teamId?: StringFieldUpdateOperationsInput | string
+    role?: EnumMemberRoleFieldUpdateOperationsInput | $Enums.MemberRole
+    status?: EnumInvitationStatusFieldUpdateOperationsInput | $Enums.InvitationStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TeamInvitationCreateManyInput = {
+    id?: string
+    email: string
+    teamId: string
+    role?: $Enums.MemberRole
+    status?: $Enums.InvitationStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type TeamInvitationUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    role?: EnumMemberRoleFieldUpdateOperationsInput | $Enums.MemberRole
+    status?: EnumInvitationStatusFieldUpdateOperationsInput | $Enums.InvitationStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TeamInvitationUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    teamId?: StringFieldUpdateOperationsInput | string
+    role?: EnumMemberRoleFieldUpdateOperationsInput | $Enums.MemberRole
+    status?: EnumInvitationStatusFieldUpdateOperationsInput | $Enums.InvitationStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type TeamMemberCreateInput = {
@@ -13845,6 +15239,16 @@ export namespace Prisma {
     _max?: NestedEnumPriorityFilter<$PrismaModel>
   }
 
+  export type TeamInvitationListRelationFilter = {
+    every?: TeamInvitationWhereInput
+    some?: TeamInvitationWhereInput
+    none?: TeamInvitationWhereInput
+  }
+
+  export type TeamInvitationOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
   export type TeamCountOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
@@ -13876,9 +15280,71 @@ export namespace Prisma {
     not?: NestedEnumMemberRoleFilter<$PrismaModel> | $Enums.MemberRole
   }
 
+  export type EnumInvitationStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.InvitationStatus | EnumInvitationStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.InvitationStatus[] | ListEnumInvitationStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.InvitationStatus[] | ListEnumInvitationStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumInvitationStatusFilter<$PrismaModel> | $Enums.InvitationStatus
+  }
+
   export type TeamScalarRelationFilter = {
     is?: TeamWhereInput
     isNot?: TeamWhereInput
+  }
+
+  export type TeamInvitationTeamIdEmailCompoundUniqueInput = {
+    teamId: string
+    email: string
+  }
+
+  export type TeamInvitationCountOrderByAggregateInput = {
+    id?: SortOrder
+    email?: SortOrder
+    teamId?: SortOrder
+    role?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type TeamInvitationMaxOrderByAggregateInput = {
+    id?: SortOrder
+    email?: SortOrder
+    teamId?: SortOrder
+    role?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type TeamInvitationMinOrderByAggregateInput = {
+    id?: SortOrder
+    email?: SortOrder
+    teamId?: SortOrder
+    role?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type EnumMemberRoleWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.MemberRole | EnumMemberRoleFieldRefInput<$PrismaModel>
+    in?: $Enums.MemberRole[] | ListEnumMemberRoleFieldRefInput<$PrismaModel>
+    notIn?: $Enums.MemberRole[] | ListEnumMemberRoleFieldRefInput<$PrismaModel>
+    not?: NestedEnumMemberRoleWithAggregatesFilter<$PrismaModel> | $Enums.MemberRole
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumMemberRoleFilter<$PrismaModel>
+    _max?: NestedEnumMemberRoleFilter<$PrismaModel>
+  }
+
+  export type EnumInvitationStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.InvitationStatus | EnumInvitationStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.InvitationStatus[] | ListEnumInvitationStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.InvitationStatus[] | ListEnumInvitationStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumInvitationStatusWithAggregatesFilter<$PrismaModel> | $Enums.InvitationStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumInvitationStatusFilter<$PrismaModel>
+    _max?: NestedEnumInvitationStatusFilter<$PrismaModel>
   }
 
   export type TeamMemberTeamIdUserIdCompoundUniqueInput = {
@@ -13908,16 +15374,6 @@ export namespace Prisma {
     joinedAt?: SortOrder
     teamId?: SortOrder
     userId?: SortOrder
-  }
-
-  export type EnumMemberRoleWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.MemberRole | EnumMemberRoleFieldRefInput<$PrismaModel>
-    in?: $Enums.MemberRole[] | ListEnumMemberRoleFieldRefInput<$PrismaModel>
-    notIn?: $Enums.MemberRole[] | ListEnumMemberRoleFieldRefInput<$PrismaModel>
-    not?: NestedEnumMemberRoleWithAggregatesFilter<$PrismaModel> | $Enums.MemberRole
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumMemberRoleFilter<$PrismaModel>
-    _max?: NestedEnumMemberRoleFilter<$PrismaModel>
   }
 
   export type TeamMessageCountOrderByAggregateInput = {
@@ -14424,6 +15880,13 @@ export namespace Prisma {
     connect?: TaskWhereUniqueInput | TaskWhereUniqueInput[]
   }
 
+  export type TeamInvitationCreateNestedManyWithoutTeamInput = {
+    create?: XOR<TeamInvitationCreateWithoutTeamInput, TeamInvitationUncheckedCreateWithoutTeamInput> | TeamInvitationCreateWithoutTeamInput[] | TeamInvitationUncheckedCreateWithoutTeamInput[]
+    connectOrCreate?: TeamInvitationCreateOrConnectWithoutTeamInput | TeamInvitationCreateOrConnectWithoutTeamInput[]
+    createMany?: TeamInvitationCreateManyTeamInputEnvelope
+    connect?: TeamInvitationWhereUniqueInput | TeamInvitationWhereUniqueInput[]
+  }
+
   export type TeamMemberUncheckedCreateNestedManyWithoutTeamInput = {
     create?: XOR<TeamMemberCreateWithoutTeamInput, TeamMemberUncheckedCreateWithoutTeamInput> | TeamMemberCreateWithoutTeamInput[] | TeamMemberUncheckedCreateWithoutTeamInput[]
     connectOrCreate?: TeamMemberCreateOrConnectWithoutTeamInput | TeamMemberCreateOrConnectWithoutTeamInput[]
@@ -14443,6 +15906,13 @@ export namespace Prisma {
     connectOrCreate?: TaskCreateOrConnectWithoutTeamInput | TaskCreateOrConnectWithoutTeamInput[]
     createMany?: TaskCreateManyTeamInputEnvelope
     connect?: TaskWhereUniqueInput | TaskWhereUniqueInput[]
+  }
+
+  export type TeamInvitationUncheckedCreateNestedManyWithoutTeamInput = {
+    create?: XOR<TeamInvitationCreateWithoutTeamInput, TeamInvitationUncheckedCreateWithoutTeamInput> | TeamInvitationCreateWithoutTeamInput[] | TeamInvitationUncheckedCreateWithoutTeamInput[]
+    connectOrCreate?: TeamInvitationCreateOrConnectWithoutTeamInput | TeamInvitationCreateOrConnectWithoutTeamInput[]
+    createMany?: TeamInvitationCreateManyTeamInputEnvelope
+    connect?: TeamInvitationWhereUniqueInput | TeamInvitationWhereUniqueInput[]
   }
 
   export type UserUpdateOneRequiredWithoutTeamsOwnedNestedInput = {
@@ -14495,6 +15965,20 @@ export namespace Prisma {
     deleteMany?: TaskScalarWhereInput | TaskScalarWhereInput[]
   }
 
+  export type TeamInvitationUpdateManyWithoutTeamNestedInput = {
+    create?: XOR<TeamInvitationCreateWithoutTeamInput, TeamInvitationUncheckedCreateWithoutTeamInput> | TeamInvitationCreateWithoutTeamInput[] | TeamInvitationUncheckedCreateWithoutTeamInput[]
+    connectOrCreate?: TeamInvitationCreateOrConnectWithoutTeamInput | TeamInvitationCreateOrConnectWithoutTeamInput[]
+    upsert?: TeamInvitationUpsertWithWhereUniqueWithoutTeamInput | TeamInvitationUpsertWithWhereUniqueWithoutTeamInput[]
+    createMany?: TeamInvitationCreateManyTeamInputEnvelope
+    set?: TeamInvitationWhereUniqueInput | TeamInvitationWhereUniqueInput[]
+    disconnect?: TeamInvitationWhereUniqueInput | TeamInvitationWhereUniqueInput[]
+    delete?: TeamInvitationWhereUniqueInput | TeamInvitationWhereUniqueInput[]
+    connect?: TeamInvitationWhereUniqueInput | TeamInvitationWhereUniqueInput[]
+    update?: TeamInvitationUpdateWithWhereUniqueWithoutTeamInput | TeamInvitationUpdateWithWhereUniqueWithoutTeamInput[]
+    updateMany?: TeamInvitationUpdateManyWithWhereWithoutTeamInput | TeamInvitationUpdateManyWithWhereWithoutTeamInput[]
+    deleteMany?: TeamInvitationScalarWhereInput | TeamInvitationScalarWhereInput[]
+  }
+
   export type TeamMemberUncheckedUpdateManyWithoutTeamNestedInput = {
     create?: XOR<TeamMemberCreateWithoutTeamInput, TeamMemberUncheckedCreateWithoutTeamInput> | TeamMemberCreateWithoutTeamInput[] | TeamMemberUncheckedCreateWithoutTeamInput[]
     connectOrCreate?: TeamMemberCreateOrConnectWithoutTeamInput | TeamMemberCreateOrConnectWithoutTeamInput[]
@@ -14537,6 +16021,42 @@ export namespace Prisma {
     deleteMany?: TaskScalarWhereInput | TaskScalarWhereInput[]
   }
 
+  export type TeamInvitationUncheckedUpdateManyWithoutTeamNestedInput = {
+    create?: XOR<TeamInvitationCreateWithoutTeamInput, TeamInvitationUncheckedCreateWithoutTeamInput> | TeamInvitationCreateWithoutTeamInput[] | TeamInvitationUncheckedCreateWithoutTeamInput[]
+    connectOrCreate?: TeamInvitationCreateOrConnectWithoutTeamInput | TeamInvitationCreateOrConnectWithoutTeamInput[]
+    upsert?: TeamInvitationUpsertWithWhereUniqueWithoutTeamInput | TeamInvitationUpsertWithWhereUniqueWithoutTeamInput[]
+    createMany?: TeamInvitationCreateManyTeamInputEnvelope
+    set?: TeamInvitationWhereUniqueInput | TeamInvitationWhereUniqueInput[]
+    disconnect?: TeamInvitationWhereUniqueInput | TeamInvitationWhereUniqueInput[]
+    delete?: TeamInvitationWhereUniqueInput | TeamInvitationWhereUniqueInput[]
+    connect?: TeamInvitationWhereUniqueInput | TeamInvitationWhereUniqueInput[]
+    update?: TeamInvitationUpdateWithWhereUniqueWithoutTeamInput | TeamInvitationUpdateWithWhereUniqueWithoutTeamInput[]
+    updateMany?: TeamInvitationUpdateManyWithWhereWithoutTeamInput | TeamInvitationUpdateManyWithWhereWithoutTeamInput[]
+    deleteMany?: TeamInvitationScalarWhereInput | TeamInvitationScalarWhereInput[]
+  }
+
+  export type TeamCreateNestedOneWithoutInvitationsInput = {
+    create?: XOR<TeamCreateWithoutInvitationsInput, TeamUncheckedCreateWithoutInvitationsInput>
+    connectOrCreate?: TeamCreateOrConnectWithoutInvitationsInput
+    connect?: TeamWhereUniqueInput
+  }
+
+  export type EnumMemberRoleFieldUpdateOperationsInput = {
+    set?: $Enums.MemberRole
+  }
+
+  export type EnumInvitationStatusFieldUpdateOperationsInput = {
+    set?: $Enums.InvitationStatus
+  }
+
+  export type TeamUpdateOneRequiredWithoutInvitationsNestedInput = {
+    create?: XOR<TeamCreateWithoutInvitationsInput, TeamUncheckedCreateWithoutInvitationsInput>
+    connectOrCreate?: TeamCreateOrConnectWithoutInvitationsInput
+    upsert?: TeamUpsertWithoutInvitationsInput
+    connect?: TeamWhereUniqueInput
+    update?: XOR<XOR<TeamUpdateToOneWithWhereWithoutInvitationsInput, TeamUpdateWithoutInvitationsInput>, TeamUncheckedUpdateWithoutInvitationsInput>
+  }
+
   export type TeamCreateNestedOneWithoutMembersInput = {
     create?: XOR<TeamCreateWithoutMembersInput, TeamUncheckedCreateWithoutMembersInput>
     connectOrCreate?: TeamCreateOrConnectWithoutMembersInput
@@ -14547,10 +16067,6 @@ export namespace Prisma {
     create?: XOR<UserCreateWithoutTeamMembersInput, UserUncheckedCreateWithoutTeamMembersInput>
     connectOrCreate?: UserCreateOrConnectWithoutTeamMembersInput
     connect?: UserWhereUniqueInput
-  }
-
-  export type EnumMemberRoleFieldUpdateOperationsInput = {
-    set?: $Enums.MemberRole
   }
 
   export type TeamUpdateOneRequiredWithoutMembersNestedInput = {
@@ -14782,6 +16298,13 @@ export namespace Prisma {
     not?: NestedEnumMemberRoleFilter<$PrismaModel> | $Enums.MemberRole
   }
 
+  export type NestedEnumInvitationStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.InvitationStatus | EnumInvitationStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.InvitationStatus[] | ListEnumInvitationStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.InvitationStatus[] | ListEnumInvitationStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumInvitationStatusFilter<$PrismaModel> | $Enums.InvitationStatus
+  }
+
   export type NestedEnumMemberRoleWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.MemberRole | EnumMemberRoleFieldRefInput<$PrismaModel>
     in?: $Enums.MemberRole[] | ListEnumMemberRoleFieldRefInput<$PrismaModel>
@@ -14790,6 +16313,16 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumMemberRoleFilter<$PrismaModel>
     _max?: NestedEnumMemberRoleFilter<$PrismaModel>
+  }
+
+  export type NestedEnumInvitationStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.InvitationStatus | EnumInvitationStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.InvitationStatus[] | ListEnumInvitationStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.InvitationStatus[] | ListEnumInvitationStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumInvitationStatusWithAggregatesFilter<$PrismaModel> | $Enums.InvitationStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumInvitationStatusFilter<$PrismaModel>
+    _max?: NestedEnumInvitationStatusFilter<$PrismaModel>
   }
   export type NestedJsonNullableFilter<$PrismaModel = never> =
     | PatchUndefined<
@@ -14929,6 +16462,7 @@ export namespace Prisma {
     members?: TeamMemberCreateNestedManyWithoutTeamInput
     messages?: TeamMessageCreateNestedManyWithoutTeamInput
     tasks?: TaskCreateNestedManyWithoutTeamInput
+    invitations?: TeamInvitationCreateNestedManyWithoutTeamInput
   }
 
   export type TeamUncheckedCreateWithoutCreatedByInput = {
@@ -14939,6 +16473,7 @@ export namespace Prisma {
     members?: TeamMemberUncheckedCreateNestedManyWithoutTeamInput
     messages?: TeamMessageUncheckedCreateNestedManyWithoutTeamInput
     tasks?: TaskUncheckedCreateNestedManyWithoutTeamInput
+    invitations?: TeamInvitationUncheckedCreateNestedManyWithoutTeamInput
   }
 
   export type TeamCreateOrConnectWithoutCreatedByInput = {
@@ -15450,6 +16985,7 @@ export namespace Prisma {
     createdBy: UserCreateNestedOneWithoutTeamsOwnedInput
     members?: TeamMemberCreateNestedManyWithoutTeamInput
     messages?: TeamMessageCreateNestedManyWithoutTeamInput
+    invitations?: TeamInvitationCreateNestedManyWithoutTeamInput
   }
 
   export type TeamUncheckedCreateWithoutTasksInput = {
@@ -15460,6 +16996,7 @@ export namespace Prisma {
     createdById: string
     members?: TeamMemberUncheckedCreateNestedManyWithoutTeamInput
     messages?: TeamMessageUncheckedCreateNestedManyWithoutTeamInput
+    invitations?: TeamInvitationUncheckedCreateNestedManyWithoutTeamInput
   }
 
   export type TeamCreateOrConnectWithoutTasksInput = {
@@ -15531,6 +17068,7 @@ export namespace Prisma {
     createdBy?: UserUpdateOneRequiredWithoutTeamsOwnedNestedInput
     members?: TeamMemberUpdateManyWithoutTeamNestedInput
     messages?: TeamMessageUpdateManyWithoutTeamNestedInput
+    invitations?: TeamInvitationUpdateManyWithoutTeamNestedInput
   }
 
   export type TeamUncheckedUpdateWithoutTasksInput = {
@@ -15541,6 +17079,7 @@ export namespace Prisma {
     createdById?: StringFieldUpdateOperationsInput | string
     members?: TeamMemberUncheckedUpdateManyWithoutTeamNestedInput
     messages?: TeamMessageUncheckedUpdateManyWithoutTeamNestedInput
+    invitations?: TeamInvitationUncheckedUpdateManyWithoutTeamNestedInput
   }
 
   export type UserCreateWithoutTeamsOwnedInput = {
@@ -15666,6 +17205,34 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type TeamInvitationCreateWithoutTeamInput = {
+    id?: string
+    email: string
+    role?: $Enums.MemberRole
+    status?: $Enums.InvitationStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type TeamInvitationUncheckedCreateWithoutTeamInput = {
+    id?: string
+    email: string
+    role?: $Enums.MemberRole
+    status?: $Enums.InvitationStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type TeamInvitationCreateOrConnectWithoutTeamInput = {
+    where: TeamInvitationWhereUniqueInput
+    create: XOR<TeamInvitationCreateWithoutTeamInput, TeamInvitationUncheckedCreateWithoutTeamInput>
+  }
+
+  export type TeamInvitationCreateManyTeamInputEnvelope = {
+    data: TeamInvitationCreateManyTeamInput | TeamInvitationCreateManyTeamInput[]
+    skipDuplicates?: boolean
+  }
+
   export type UserUpsertWithoutTeamsOwnedInput = {
     update: XOR<UserUpdateWithoutTeamsOwnedInput, UserUncheckedUpdateWithoutTeamsOwnedInput>
     create: XOR<UserCreateWithoutTeamsOwnedInput, UserUncheckedCreateWithoutTeamsOwnedInput>
@@ -15759,6 +17326,95 @@ export namespace Prisma {
     data: XOR<TaskUpdateManyMutationInput, TaskUncheckedUpdateManyWithoutTeamInput>
   }
 
+  export type TeamInvitationUpsertWithWhereUniqueWithoutTeamInput = {
+    where: TeamInvitationWhereUniqueInput
+    update: XOR<TeamInvitationUpdateWithoutTeamInput, TeamInvitationUncheckedUpdateWithoutTeamInput>
+    create: XOR<TeamInvitationCreateWithoutTeamInput, TeamInvitationUncheckedCreateWithoutTeamInput>
+  }
+
+  export type TeamInvitationUpdateWithWhereUniqueWithoutTeamInput = {
+    where: TeamInvitationWhereUniqueInput
+    data: XOR<TeamInvitationUpdateWithoutTeamInput, TeamInvitationUncheckedUpdateWithoutTeamInput>
+  }
+
+  export type TeamInvitationUpdateManyWithWhereWithoutTeamInput = {
+    where: TeamInvitationScalarWhereInput
+    data: XOR<TeamInvitationUpdateManyMutationInput, TeamInvitationUncheckedUpdateManyWithoutTeamInput>
+  }
+
+  export type TeamInvitationScalarWhereInput = {
+    AND?: TeamInvitationScalarWhereInput | TeamInvitationScalarWhereInput[]
+    OR?: TeamInvitationScalarWhereInput[]
+    NOT?: TeamInvitationScalarWhereInput | TeamInvitationScalarWhereInput[]
+    id?: StringFilter<"TeamInvitation"> | string
+    email?: StringFilter<"TeamInvitation"> | string
+    teamId?: StringFilter<"TeamInvitation"> | string
+    role?: EnumMemberRoleFilter<"TeamInvitation"> | $Enums.MemberRole
+    status?: EnumInvitationStatusFilter<"TeamInvitation"> | $Enums.InvitationStatus
+    createdAt?: DateTimeFilter<"TeamInvitation"> | Date | string
+    updatedAt?: DateTimeFilter<"TeamInvitation"> | Date | string
+  }
+
+  export type TeamCreateWithoutInvitationsInput = {
+    id?: string
+    name: string
+    inviteCode?: string | null
+    createdAt?: Date | string
+    createdBy: UserCreateNestedOneWithoutTeamsOwnedInput
+    members?: TeamMemberCreateNestedManyWithoutTeamInput
+    messages?: TeamMessageCreateNestedManyWithoutTeamInput
+    tasks?: TaskCreateNestedManyWithoutTeamInput
+  }
+
+  export type TeamUncheckedCreateWithoutInvitationsInput = {
+    id?: string
+    name: string
+    inviteCode?: string | null
+    createdAt?: Date | string
+    createdById: string
+    members?: TeamMemberUncheckedCreateNestedManyWithoutTeamInput
+    messages?: TeamMessageUncheckedCreateNestedManyWithoutTeamInput
+    tasks?: TaskUncheckedCreateNestedManyWithoutTeamInput
+  }
+
+  export type TeamCreateOrConnectWithoutInvitationsInput = {
+    where: TeamWhereUniqueInput
+    create: XOR<TeamCreateWithoutInvitationsInput, TeamUncheckedCreateWithoutInvitationsInput>
+  }
+
+  export type TeamUpsertWithoutInvitationsInput = {
+    update: XOR<TeamUpdateWithoutInvitationsInput, TeamUncheckedUpdateWithoutInvitationsInput>
+    create: XOR<TeamCreateWithoutInvitationsInput, TeamUncheckedCreateWithoutInvitationsInput>
+    where?: TeamWhereInput
+  }
+
+  export type TeamUpdateToOneWithWhereWithoutInvitationsInput = {
+    where?: TeamWhereInput
+    data: XOR<TeamUpdateWithoutInvitationsInput, TeamUncheckedUpdateWithoutInvitationsInput>
+  }
+
+  export type TeamUpdateWithoutInvitationsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    inviteCode?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: UserUpdateOneRequiredWithoutTeamsOwnedNestedInput
+    members?: TeamMemberUpdateManyWithoutTeamNestedInput
+    messages?: TeamMessageUpdateManyWithoutTeamNestedInput
+    tasks?: TaskUpdateManyWithoutTeamNestedInput
+  }
+
+  export type TeamUncheckedUpdateWithoutInvitationsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    inviteCode?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdById?: StringFieldUpdateOperationsInput | string
+    members?: TeamMemberUncheckedUpdateManyWithoutTeamNestedInput
+    messages?: TeamMessageUncheckedUpdateManyWithoutTeamNestedInput
+    tasks?: TaskUncheckedUpdateManyWithoutTeamNestedInput
+  }
+
   export type TeamCreateWithoutMembersInput = {
     id?: string
     name: string
@@ -15767,6 +17423,7 @@ export namespace Prisma {
     createdBy: UserCreateNestedOneWithoutTeamsOwnedInput
     messages?: TeamMessageCreateNestedManyWithoutTeamInput
     tasks?: TaskCreateNestedManyWithoutTeamInput
+    invitations?: TeamInvitationCreateNestedManyWithoutTeamInput
   }
 
   export type TeamUncheckedCreateWithoutMembersInput = {
@@ -15777,6 +17434,7 @@ export namespace Prisma {
     createdById: string
     messages?: TeamMessageUncheckedCreateNestedManyWithoutTeamInput
     tasks?: TaskUncheckedCreateNestedManyWithoutTeamInput
+    invitations?: TeamInvitationUncheckedCreateNestedManyWithoutTeamInput
   }
 
   export type TeamCreateOrConnectWithoutMembersInput = {
@@ -15842,6 +17500,7 @@ export namespace Prisma {
     createdBy?: UserUpdateOneRequiredWithoutTeamsOwnedNestedInput
     messages?: TeamMessageUpdateManyWithoutTeamNestedInput
     tasks?: TaskUpdateManyWithoutTeamNestedInput
+    invitations?: TeamInvitationUpdateManyWithoutTeamNestedInput
   }
 
   export type TeamUncheckedUpdateWithoutMembersInput = {
@@ -15852,6 +17511,7 @@ export namespace Prisma {
     createdById?: StringFieldUpdateOperationsInput | string
     messages?: TeamMessageUncheckedUpdateManyWithoutTeamNestedInput
     tasks?: TaskUncheckedUpdateManyWithoutTeamNestedInput
+    invitations?: TeamInvitationUncheckedUpdateManyWithoutTeamNestedInput
   }
 
   export type UserUpsertWithoutTeamMembersInput = {
@@ -15907,6 +17567,7 @@ export namespace Prisma {
     createdBy: UserCreateNestedOneWithoutTeamsOwnedInput
     members?: TeamMemberCreateNestedManyWithoutTeamInput
     tasks?: TaskCreateNestedManyWithoutTeamInput
+    invitations?: TeamInvitationCreateNestedManyWithoutTeamInput
   }
 
   export type TeamUncheckedCreateWithoutMessagesInput = {
@@ -15917,6 +17578,7 @@ export namespace Prisma {
     createdById: string
     members?: TeamMemberUncheckedCreateNestedManyWithoutTeamInput
     tasks?: TaskUncheckedCreateNestedManyWithoutTeamInput
+    invitations?: TeamInvitationUncheckedCreateNestedManyWithoutTeamInput
   }
 
   export type TeamCreateOrConnectWithoutMessagesInput = {
@@ -15982,6 +17644,7 @@ export namespace Prisma {
     createdBy?: UserUpdateOneRequiredWithoutTeamsOwnedNestedInput
     members?: TeamMemberUpdateManyWithoutTeamNestedInput
     tasks?: TaskUpdateManyWithoutTeamNestedInput
+    invitations?: TeamInvitationUpdateManyWithoutTeamNestedInput
   }
 
   export type TeamUncheckedUpdateWithoutMessagesInput = {
@@ -15992,6 +17655,7 @@ export namespace Prisma {
     createdById?: StringFieldUpdateOperationsInput | string
     members?: TeamMemberUncheckedUpdateManyWithoutTeamNestedInput
     tasks?: TaskUncheckedUpdateManyWithoutTeamNestedInput
+    invitations?: TeamInvitationUncheckedUpdateManyWithoutTeamNestedInput
   }
 
   export type UserUpsertWithoutMessagesInput = {
@@ -16313,6 +17977,7 @@ export namespace Prisma {
     members?: TeamMemberUpdateManyWithoutTeamNestedInput
     messages?: TeamMessageUpdateManyWithoutTeamNestedInput
     tasks?: TaskUpdateManyWithoutTeamNestedInput
+    invitations?: TeamInvitationUpdateManyWithoutTeamNestedInput
   }
 
   export type TeamUncheckedUpdateWithoutCreatedByInput = {
@@ -16323,6 +17988,7 @@ export namespace Prisma {
     members?: TeamMemberUncheckedUpdateManyWithoutTeamNestedInput
     messages?: TeamMessageUncheckedUpdateManyWithoutTeamNestedInput
     tasks?: TaskUncheckedUpdateManyWithoutTeamNestedInput
+    invitations?: TeamInvitationUncheckedUpdateManyWithoutTeamNestedInput
   }
 
   export type TeamUncheckedUpdateManyWithoutCreatedByInput = {
@@ -16428,6 +18094,15 @@ export namespace Prisma {
     userId: string
   }
 
+  export type TeamInvitationCreateManyTeamInput = {
+    id?: string
+    email: string
+    role?: $Enums.MemberRole
+    status?: $Enums.InvitationStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
   export type TeamMemberUpdateWithoutTeamInput = {
     id?: StringFieldUpdateOperationsInput | string
     role?: EnumMemberRoleFieldUpdateOperationsInput | $Enums.MemberRole
@@ -16507,6 +18182,33 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     userId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type TeamInvitationUpdateWithoutTeamInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    role?: EnumMemberRoleFieldUpdateOperationsInput | $Enums.MemberRole
+    status?: EnumInvitationStatusFieldUpdateOperationsInput | $Enums.InvitationStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TeamInvitationUncheckedUpdateWithoutTeamInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    role?: EnumMemberRoleFieldUpdateOperationsInput | $Enums.MemberRole
+    status?: EnumInvitationStatusFieldUpdateOperationsInput | $Enums.InvitationStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TeamInvitationUncheckedUpdateManyWithoutTeamInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    role?: EnumMemberRoleFieldUpdateOperationsInput | $Enums.MemberRole
+    status?: EnumInvitationStatusFieldUpdateOperationsInput | $Enums.InvitationStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
 
