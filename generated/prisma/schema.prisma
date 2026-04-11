@@ -58,6 +58,11 @@ model User {
   messages     TeamMessage[] @relation("MessageSender")
   activityLogs ActivityLog[]
 
+  // Direct Messaging
+  conversations     DirectConversation[] @relation("UserConversations")
+  sentMessages      DirectMessage[]      @relation("DirectMessageSender")
+  sentDirectInvites DirectInvitation[]   @relation("DirectInvitationSender")
+
   @@unique([email])
   @@map("user")
 }
@@ -207,4 +212,47 @@ model ActivityLog {
   @@index([userId])
   @@index([createdAt])
   @@map("activity_log")
+}
+
+// ─────────────────────────────────────────
+// Direct Messaging Models
+// ─────────────────────────────────────────
+
+model DirectConversation {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  participants User[]          @relation("UserConversations")
+  messages     DirectMessage[]
+
+  @@map("direct_conversation")
+}
+
+model DirectMessage {
+  id        String   @id @default(cuid())
+  content   String
+  createdAt DateTime @default(now())
+
+  conversationId String
+  senderId       String
+  conversation   DirectConversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  sender         User               @relation("DirectMessageSender", fields: [senderId], references: [id])
+
+  @@index([conversationId])
+  @@map("direct_message")
+}
+
+model DirectInvitation {
+  id            String           @id @default(cuid())
+  senderId      String
+  receiverEmail String
+  status        InvitationStatus @default(PENDING)
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @updatedAt
+
+  sender User @relation("DirectInvitationSender", fields: [senderId], references: [id])
+
+  @@unique([senderId, receiverEmail])
+  @@map("direct_invitation")
 }

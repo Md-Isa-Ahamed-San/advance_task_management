@@ -226,6 +226,29 @@ exports.Prisma.ActivityLogScalarFieldEnum = {
   userId: 'userId'
 };
 
+exports.Prisma.DirectConversationScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.DirectMessageScalarFieldEnum = {
+  id: 'id',
+  content: 'content',
+  createdAt: 'createdAt',
+  conversationId: 'conversationId',
+  senderId: 'senderId'
+};
+
+exports.Prisma.DirectInvitationScalarFieldEnum = {
+  id: 'id',
+  senderId: 'senderId',
+  receiverEmail: 'receiverEmail',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -279,7 +302,10 @@ exports.Prisma.ModelName = {
   TeamInvitation: 'TeamInvitation',
   TeamMember: 'TeamMember',
   TeamMessage: 'TeamMessage',
-  ActivityLog: 'ActivityLog'
+  ActivityLog: 'ActivityLog',
+  DirectConversation: 'DirectConversation',
+  DirectMessage: 'DirectMessage',
+  DirectInvitation: 'DirectInvitation'
 };
 
 /**

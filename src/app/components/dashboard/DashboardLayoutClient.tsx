@@ -10,9 +10,10 @@ interface DashboardLayoutClientProps {
   userEmail?: string
   userImage?: string
   isAdmin?: boolean
+  chatInviteCount?: number
 }
 
-export function DashboardLayoutClient({ children, userName, userEmail, userImage, isAdmin }: DashboardLayoutClientProps) {
+export function DashboardLayoutClient({ children, userName, userEmail, userImage, isAdmin, chatInviteCount = 0 }: DashboardLayoutClientProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
   return (
@@ -63,6 +64,7 @@ export function DashboardLayoutClient({ children, userName, userEmail, userImage
           userEmail={userEmail}
           userImage={userImage}
           isAdmin={isAdmin}
+          chatInviteCount={chatInviteCount}
           onCloseMobile={() => setMobileMenuOpen(false)}
         />
       </div>

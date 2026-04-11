@@ -29,6 +29,7 @@ export async function GET() {
       // Scope: access all team rooms + publish/subscribe/presence/history
       'x-ably-capability': JSON.stringify({
         'team:*': ['publish', 'subscribe', 'presence', 'history'],
+        'direct:*': ['publish', 'subscribe', 'presence', 'history'],
       }),
       // clientId = user's DB id — required for presence & identity
       'x-ably-clientId': session.user.id,

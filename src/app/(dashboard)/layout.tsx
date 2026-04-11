@@ -1,6 +1,7 @@
 import { redirect } from 'next/navigation'
 import { getSession } from '~/server/better-auth/server'
 import { db } from '~/server/db'
+import { getDirectInvitationCount } from '~/server/actions/chat-actions'
 import { DashboardLayoutClient } from '@/app/components/dashboard/DashboardLayoutClient'
 
 export default async function DashboardLayout({
@@ -12,10 +13,13 @@ export default async function DashboardLayout({
 
   if (!session) redirect('/login')
 
-  const me = await db.user.findUnique({
-    where: { id: session.user.id },
-    select: { role: true },
-  })
+  const [me, inviteCount] = await Promise.all([
+    db.user.findUnique({
+      where: { id: session.user.id },
+      select: { role: true },
+    }),
+    getDirectInvitationCount()
+  ])
   const isAdmin = me?.role === 'admin'
 
   return (
@@ -24,6 +28,7 @@ export default async function DashboardLayout({
       userEmail={session.user.email}
       userImage={session.user.image ?? undefined}
       isAdmin={isAdmin}
+      chatInviteCount={inviteCount}
     >
       {children}
     </DashboardLayoutClient>

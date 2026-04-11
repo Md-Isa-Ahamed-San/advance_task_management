@@ -2,7 +2,7 @@
 
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
-import { Home, Bell, CheckSquare, Calendar, Users, Shield, LogOut, Sun, Moon } from 'lucide-react'
+import { Home, Bell, CheckSquare, Calendar, Users, Shield, LogOut, Sun, Moon, MessageSquare } from 'lucide-react'
 import { authClient } from '~/server/better-auth/client'
 import { useEffect, useState } from 'react'
 
@@ -12,6 +12,7 @@ interface SidebarProps {
   userImage?: string
   isAdmin?: boolean
   onCloseMobile?: () => void
+  chatInviteCount?: number
 }
 
 const navigationItems = [
@@ -20,6 +21,7 @@ const navigationItems = [
   { path: '/tasks', label: 'Tasks', icon: CheckSquare },
   { path: '/calendar', label: 'Calendar', icon: Calendar },
   { path: '/teams', label: 'Teams', icon: Users },
+  { path: '/conversations', label: 'Conversation', icon: MessageSquare },
   { path: '/admin', label: 'Admin Panel', icon: Shield },
 ]
 
@@ -34,7 +36,14 @@ function getInitials(name: string): string {
   return name.split(' ').map((p) => p[0]).join('').toUpperCase().slice(0, 2)
 }
 
-export function Sidebar({ userName = 'User', userEmail = '', userImage, isAdmin = false, onCloseMobile }: SidebarProps) {
+export function Sidebar({ 
+  userName = 'User', 
+  userEmail = '', 
+  userImage, 
+  isAdmin = false, 
+  onCloseMobile,
+  chatInviteCount = 0
+}: SidebarProps) {
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
@@ -128,6 +137,14 @@ export function Sidebar({ userName = 'User', userEmail = '', userImage, isAdmin 
                     className="ml-auto h-1.5 w-1.5 rounded-full"
                     style={{ backgroundColor: 'var(--primary)' }}
                   />
+                )}
+                {!isActive && item.path === '/conversations' && chatInviteCount > 0 && (
+                  <span
+                    className="ml-auto flex h-4.5 min-w-[18px] items-center justify-center rounded-full px-1 text-[10px] font-bold text-white shadow-sm ring-2 ring-background"
+                    style={{ backgroundColor: 'var(--destructive)', background: 'linear-gradient(135deg, #ef4444, #b91c1c)' }}
+                  >
+                    {chatInviteCount > 9 ? '9+' : chatInviteCount}
+                  </span>
                 )}
               </Link>
             )
